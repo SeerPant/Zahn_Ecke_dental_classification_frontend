@@ -6,10 +6,8 @@ import '../../services/auth_service.dart';
 import '../../utils/theme.dart';
 
 class LoginScreen extends StatefulWidget {
-  //constructor
   const LoginScreen({super.key});
 
-  //creating mutable state
   @override
   State<LoginScreen> createState() => _LoginScreenState();
 }
@@ -20,7 +18,6 @@ class _LoginScreenState extends State<LoginScreen> {
   final _passwordController = TextEditingController();
   bool _obscurePassword = true;
 
-  //disposing memory
   @override
   void dispose() {
     _emailController.dispose();
@@ -28,7 +25,6 @@ class _LoginScreenState extends State<LoginScreen> {
     super.dispose();
   }
 
-  //login logic
   Future<void> _handleLogin() async {
     if (!_formKey.currentState!.validate()) return;
 
@@ -46,7 +42,7 @@ class _LoginScreenState extends State<LoginScreen> {
         const SnackBar(
             content: Text('Login successful!'), backgroundColor: Colors.green),
       );
-      // TODO: add navigation to user profile next
+      Navigator.pushReplacementNamed(context, '/profile');
     } else {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
@@ -57,7 +53,6 @@ class _LoginScreenState extends State<LoginScreen> {
     }
   }
 
-  //UI layout
   @override
   Widget build(BuildContext context) {
     final authService = context.watch<AuthService>();
@@ -67,7 +62,6 @@ class _LoginScreenState extends State<LoginScreen> {
       body: SafeArea(
         child: Column(
           children: [
-            //header with teeth image
             Container(
               width: double.infinity,
               color: AppTheme.primaryBlue,
@@ -88,8 +82,6 @@ class _LoginScreenState extends State<LoginScreen> {
                 ),
               ),
             ),
-
-            //white content section
             Expanded(
               child: Container(
                 width: double.infinity,
@@ -105,8 +97,6 @@ class _LoginScreenState extends State<LoginScreen> {
                       crossAxisAlignment: CrossAxisAlignment.stretch,
                       children: [
                         const SizedBox(height: 10),
-
-                        //login title
                         const Text(
                           'Login',
                           style: TextStyle(
@@ -117,10 +107,7 @@ class _LoginScreenState extends State<LoginScreen> {
                           ),
                           textAlign: TextAlign.center,
                         ),
-
                         const SizedBox(height: 40),
-
-                        //email field
                         const Align(
                           alignment: Alignment.centerLeft,
                           child: Text(
@@ -167,10 +154,7 @@ class _LoginScreenState extends State<LoginScreen> {
                             return null;
                           },
                         ),
-
                         const SizedBox(height: 24),
-
-                        //password field
                         const Align(
                           alignment: Alignment.centerLeft,
                           child: Text(
@@ -227,15 +211,12 @@ class _LoginScreenState extends State<LoginScreen> {
                             return null;
                           },
                         ),
-
                         const SizedBox(height: 8),
-
-                        //forgot password
                         Align(
                           alignment: Alignment.centerRight,
                           child: TextButton(
                             onPressed: () {
-                              // TODO: Implementation left for forgot password
+                              // TODO: Implement forgot password
                             },
                             child: const Text(
                               'Forgot your password?',
@@ -246,10 +227,7 @@ class _LoginScreenState extends State<LoginScreen> {
                             ),
                           ),
                         ),
-
                         const SizedBox(height: 16),
-
-                        //sign in
                         SizedBox(
                           height: 50,
                           child: ElevatedButton(
@@ -281,8 +259,34 @@ class _LoginScreenState extends State<LoginScreen> {
                                   ),
                           ),
                         ),
-
                         const SizedBox(height: 20),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            const Text(
+                              "Don't have an account? ",
+                              style: TextStyle(
+                                fontSize: 14,
+                                color: Colors.black,
+                              ),
+                            ),
+                            GestureDetector(
+                              onTap: () {
+                                Navigator.pushNamed(context, '/register');
+                              },
+                              child: const Text(
+                                'Sign up!',
+                                style: TextStyle(
+                                  fontSize: 14,
+                                  color: Colors.black,
+                                  fontWeight: FontWeight.bold,
+                                  decoration: TextDecoration.underline,
+                                  decorationThickness: 2,
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
                       ],
                     ),
                   ),

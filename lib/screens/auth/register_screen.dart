@@ -14,8 +14,7 @@ class RegisterScreen extends StatefulWidget {
 
 class _RegisterScreenState extends State<RegisterScreen> {
   final _formKey = GlobalKey<FormState>();
-  final _firstNameController = TextEditingController();
-  final _lastNameController = TextEditingController();
+  final _nameController = TextEditingController();
   final _emailController = TextEditingController();
   final _passwordController = TextEditingController();
   final _confirmPasswordController = TextEditingController();
@@ -24,8 +23,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
 
   @override
   void dispose() {
-    _firstNameController.dispose();
-    _lastNameController.dispose();
+    _nameController.dispose();
     _emailController.dispose();
     _passwordController.dispose();
     _confirmPasswordController.dispose();
@@ -33,17 +31,31 @@ class _RegisterScreenState extends State<RegisterScreen> {
   }
 
   Future<void> _handleRegister() async {
-    if (!_formKey.currentState!.validate()) return;
+    if (!_formKey.currentState!.validate()) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text('Please fill all fields correctly'),
+          backgroundColor: Colors.orange,
+        ),
+      );
+      return;
+    }
 
     final authService = context.read<AuthService>();
 
-    final fullName =
-        '${_firstNameController.text.trim()} ${_lastNameController.text.trim()}';
+    ScaffoldMessenger.of(context).showSnackBar(
+      const SnackBar(
+        content: Text('Registering...'),
+        duration: Duration(seconds: 1),
+      ),
+    );
 
     final success = await authService.register(
       email: _emailController.text.trim(),
       password: _passwordController.text,
-      name: fullName.trim().isEmpty ? null : fullName,
+      name: _nameController.text.trim().isEmpty
+          ? null
+          : _nameController.text.trim(),
     );
 
     if (!mounted) return;
@@ -51,16 +63,30 @@ class _RegisterScreenState extends State<RegisterScreen> {
     if (success) {
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(
-          content: Text('Registration successful!'),
+          content: Text('Registration successful! Please login.'),
           backgroundColor: Colors.green,
+          duration: Duration(seconds: 2),
         ),
       );
-      Navigator.pushReplacementNamed(context, '/login');
+
+      await Future.delayed(const Duration(milliseconds: 500));
+
+      if (mounted) {
+        Navigator.pushReplacementNamed(context, '/login');
+      }
     } else {
+      final errorMsg = authService.errorMessage ?? 'Registration failed';
+
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
-          content: Text(authService.errorMessage ?? 'Registration failed'),
+          content: Text(errorMsg),
           backgroundColor: Colors.red,
+          duration: const Duration(seconds: 4),
+          action: SnackBarAction(
+            label: 'Dismiss',
+            textColor: Colors.white,
+            onPressed: () {},
+          ),
         ),
       );
     }
@@ -76,7 +102,6 @@ class _RegisterScreenState extends State<RegisterScreen> {
         child: SafeArea(
           child: Column(
             children: [
-              //header
               Container(
                 padding: const EdgeInsets.symmetric(vertical: 30),
                 child: const Text(
@@ -90,8 +115,6 @@ class _RegisterScreenState extends State<RegisterScreen> {
                   ),
                 ),
               ),
-
-              //content section
               Expanded(
                 child: Container(
                   decoration: const BoxDecoration(
@@ -109,52 +132,28 @@ class _RegisterScreenState extends State<RegisterScreen> {
                         crossAxisAlignment: CrossAxisAlignment.stretch,
                         children: [
                           const SizedBox(height: 20),
-
-                          //first name
                           const Text(
-                            'First Name',
+                            'Name',
                             style: TextStyle(
                                 fontSize: 14, fontWeight: FontWeight.w500),
                           ),
                           const SizedBox(height: 8),
                           TextFormField(
-                            controller: _firstNameController,
+                            controller: _nameController,
                             decoration: const InputDecoration(
-                              hintText: 'Enter your first name',
+                              hintText: 'Enter your name',
                             ),
                             validator: (value) {
                               if (value == null || value.isEmpty) {
-                                return 'Please enter your first name';
+                                return 'Please enter your name';
+                              }
+                              if (value.trim().length < 2) {
+                                return 'Name must be at least 2 characters';
                               }
                               return null;
                             },
                           ),
-
                           const SizedBox(height: 20),
-
-                          //last name
-                          const Text(
-                            'Last Name',
-                            style: TextStyle(
-                                fontSize: 14, fontWeight: FontWeight.w500),
-                          ),
-                          const SizedBox(height: 8),
-                          TextFormField(
-                            controller: _lastNameController,
-                            decoration: const InputDecoration(
-                              hintText: 'Enter your last name',
-                            ),
-                            validator: (value) {
-                              if (value == null || value.isEmpty) {
-                                return 'Please enter your last name';
-                              }
-                              return null;
-                            },
-                          ),
-
-                          const SizedBox(height: 20),
-
-                          //email
                           const Text(
                             'Email',
                             style: TextStyle(
@@ -177,10 +176,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                               return null;
                             },
                           ),
-
                           const SizedBox(height: 20),
-
-                          //password and field
                           const Text(
                             'Password',
                             style: TextStyle(
@@ -215,10 +211,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                               return null;
                             },
                           ),
-
                           const SizedBox(height: 20),
-
-                          //confirm password
                           const Text(
                             'Confirm password',
                             style: TextStyle(
@@ -254,10 +247,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                               return null;
                             },
                           ),
-
                           const SizedBox(height: 32),
-
-                          //button sign up
                           SizedBox(
                             height: 50,
                             child: ElevatedButton(
@@ -279,10 +269,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                                     ),
                             ),
                           ),
-
                           const SizedBox(height: 24),
-
-                          //link for login
                           Row(
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: [
