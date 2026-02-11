@@ -35,12 +35,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
   }
 
   void _editProfile() {
-    ScaffoldMessenger.of(context).showSnackBar(
-      const SnackBar(
-        content: Text('Edit profile feature coming soon'),
-        backgroundColor: Colors.blue,
-      ),
-    );
+    Navigator.pushNamed(context, "/editprofile");
   }
 
   Future<void> _logout() async {

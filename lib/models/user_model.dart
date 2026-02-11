@@ -27,9 +27,8 @@ class User {
       //defaulting to user if not provided
       role: json['role'] ?? 'USER',
       createdAt: DateTime.parse(json['createdAt']),
-      updatedAt: json['updatedAt'] != null
-          ? DateTime.parse(json['updatedAt'])
-          : null, //handle missing updatedAt
+      updatedAt:
+          json['updatedAt'] != null ? DateTime.parse(json['updatedAt']) : null,
     );
   }
 

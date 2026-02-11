@@ -31,7 +31,7 @@ class AuthService extends ChangeNotifier {
     _isLoading = true;
     _errorMessage = null;
     notifyListeners();
-
+    //POSt request
     try {
       final response = await http
           .post(
@@ -54,7 +54,7 @@ class AuthService extends ChangeNotifier {
       try {
         data = json.decode(response.body);
       } catch (e) {
-        _errorMessage = 'Invalid server response';
+        _errorMessage = 'Server error. Please try again later.';
         _isLoading = false;
         notifyListeners();
         return false;
@@ -83,7 +83,7 @@ class AuthService extends ChangeNotifier {
     }
   }
 
-  //user login
+  //login user
   Future<bool> login({
     required String email,
     required String password,
@@ -113,7 +113,7 @@ class AuthService extends ChangeNotifier {
       try {
         data = json.decode(response.body);
       } catch (e) {
-        _errorMessage = 'Invalid server response';
+        _errorMessage = 'Please re-enter your email or password';
         _isLoading = false;
         notifyListeners();
         return false;
@@ -129,20 +129,26 @@ class AuthService extends ChangeNotifier {
         notifyListeners();
         return true;
       } else {
-        _errorMessage = data['message'] ?? 'Login failed';
+        //error handling
+        if (response.statusCode == 401 || response.statusCode == 400) {
+          _errorMessage = 'Please reenter your email or password';
+        } else {
+          _errorMessage =
+              data['message'] ?? 'Please reenter your email or password';
+        }
         _isLoading = false;
         notifyListeners();
         return false;
       }
     } catch (e) {
-      _errorMessage = 'Network error: Unable to connect to server';
+      _errorMessage = 'Please reenter your email or password';
       _isLoading = false;
       notifyListeners();
       return false;
     }
   }
 
-  //user logouts
+  //user logout
   Future<void> logout() async {
     _token = null;
     _currentUser = null;
