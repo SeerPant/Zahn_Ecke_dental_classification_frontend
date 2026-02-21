@@ -2,11 +2,11 @@
 // hitting through: src/route/auth/auth.route.js
 
 class ApiConfig {
-  static const String baseUrl = 'http://10.0.2.2:3000/api';
+  static const String baseUrl = 'http://10.0.2.2:3000';
   //hitting register
-  static const String register = '$baseUrl/auth/register';
+  static const String register = '$baseUrl/api/auth/register';
   //hitting login
-  static const String login = '$baseUrl/auth/login';
+  static const String login = '$baseUrl/api/auth/login';
   //fetching profile
-  static const String profile = '$baseUrl/auth/profile';
+  static const String profile = '$baseUrl/api/auth/profile';
 }

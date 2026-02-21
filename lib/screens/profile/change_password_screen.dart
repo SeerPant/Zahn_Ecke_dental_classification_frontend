@@ -1,6 +1,7 @@
-//change password screen where user will change their password
-
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import '../../services/auth_service.dart';
+import '../../services/user_service.dart';
 import '../../utils/theme.dart';
 
 class ChangePasswordScreen extends StatefulWidget {
@@ -15,6 +16,7 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
   final _oldPasswordController = TextEditingController();
   final _newPasswordController = TextEditingController();
   final _confirmPasswordController = TextEditingController();
+  final _userService = UserService();
 
   bool _isOldPasswordVisible = false;
   bool _isNewPasswordVisible = false;
@@ -38,25 +40,69 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
       _isLoading = true;
     });
 
-    // TODO: Implement API call to change password
-    
-    await Future.delayed(const Duration(seconds: 1));
+    try {
+      final authService = context.read<AuthService>();
+      final token = authService.token;
 
-    if (!mounted) return;
+      if (token == null) {
+        if (!mounted) return;
 
-    setState(() {
-      _isLoading = false;
-    });
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(
+            content: Text('Please login again'),
+            backgroundColor: Colors.red,
+          ),
+        );
 
-    ScaffoldMessenger.of(context).showSnackBar(
-      const SnackBar(
-        content: Text('Password changed successfully'),
-        backgroundColor: Colors.green,
-      ),
-    );
+        Navigator.pushReplacementNamed(context, '/login');
+        return;
+      }
 
-    //Navigate back after successful password change
-    Navigator.pop(context);
+      final result = await _userService.changePassword(
+        token: token,
+        oldPassword: _oldPasswordController.text,
+        newPassword: _newPasswordController.text,
+        confirmPassword: _confirmPasswordController.text,
+      );
+
+      if (!mounted) return;
+
+      setState(() {
+        _isLoading = false;
+      });
+
+      if (result['success']) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text(result['message'] ?? 'Password changed successfully'),
+            backgroundColor: Colors.green,
+          ),
+        );
+        //avigate back after successful password change
+
+        Navigator.pop(context);
+      } else {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text(result['message'] ?? 'Failed to change password'),
+            backgroundColor: Colors.red,
+          ),
+        );
+      }
+    } catch (e) {
+      if (!mounted) return;
+
+      setState(() {
+        _isLoading = false;
+      });
+
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text('Error: ${e.toString()}'),
+          backgroundColor: Colors.red,
+        ),
+      );
+    }
   }
 
   @override

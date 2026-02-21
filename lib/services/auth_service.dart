@@ -1,6 +1,4 @@
 //Authentication service for API calls
-//Backend service: src/service/auth.service.js
-//Backend controller: src/controller/auth/auth.controller.js
 
 import 'package:flutter/foundation.dart';
 import 'package:http/http.dart' as http;
@@ -154,6 +152,25 @@ class AuthService extends ChangeNotifier {
     _currentUser = null;
     await _storage.delete(key: 'auth_token');
     notifyListeners();
+  }
+
+  //update user information
+  void updateUserInfo(Map<String, dynamic> userData) {
+    if (_currentUser != null) {
+      _currentUser = User(
+        id: userData['id'] ?? _currentUser!.id,
+        email: userData['email'] ?? _currentUser!.email,
+        name: userData['name'] ?? _currentUser!.name,
+        role: userData['role'] ?? _currentUser!.role,
+        createdAt: userData['createdAt'] != null
+            ? DateTime.parse(userData['createdAt'])
+            : _currentUser!.createdAt,
+        updatedAt: userData['updatedAt'] != null
+            ? DateTime.parse(userData['updatedAt'])
+            : _currentUser!.updatedAt,
+      );
+      notifyListeners();
+    }
   }
 
   //load saved token for auto-login
