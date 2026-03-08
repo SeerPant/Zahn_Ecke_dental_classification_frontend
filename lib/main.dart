@@ -7,6 +7,8 @@ import 'screens/auth/register_screen.dart';
 import 'screens/profile/profile_screen.dart';
 import 'screens/profile/edit_profile_screen.dart';
 import 'screens/profile/change_password_screen.dart';
+import 'screens/profile/termsandconditions_screen.dart';
+import 'screens/profile/aboutus_screen.dart';
 import 'services/auth_service.dart';
 import 'utils/theme.dart';
 
@@ -33,7 +35,9 @@ class MyApp extends StatelessWidget {
           '/register': (context) => const RegisterScreen(),
           '/profile': (context) => const ProfileScreen(),
           '/editprofile': (context) => const EditProfileScreen(),
-          '/changepassword': (context) => const ChangePasswordScreen()
+          '/changepassword': (context) => const ChangePasswordScreen(),
+          '/terms': (context) => const TermsScreen(),
+          '/aboutus': (context) => const AboutUsScreen()
         },
       ),
     );

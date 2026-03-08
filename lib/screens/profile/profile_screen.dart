@@ -1,7 +1,3 @@
-// lib/screens/profile/profile_screen.dart
-
-// GET /api/auth/profile (protected)
-
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:image_picker/image_picker.dart';
@@ -58,6 +54,49 @@ class _ProfileScreenState extends State<ProfileScreen> {
     Navigator.pushNamed(context, "/editprofile");
   }
 
+  void _showHamburgerMenu() {
+    showModalBottomSheet(
+      context: context,
+      shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.vertical(top: Radius.circular(16)),
+      ),
+      builder: (context) => SafeArea(
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            const SizedBox(height: 8),
+            Container(
+              width: 40,
+              height: 4,
+              decoration: BoxDecoration(
+                color: Colors.grey[300],
+                borderRadius: BorderRadius.circular(2),
+              ),
+            ),
+            const SizedBox(height: 8),
+            ListTile(
+              leading: const Icon(Icons.description_outlined),
+              title: const Text('Terms and Conditions'),
+              onTap: () {
+                Navigator.pop(context);
+                Navigator.pushNamed(context, '/terms');
+              },
+            ),
+            ListTile(
+              leading: const Icon(Icons.info_outlined),
+              title: const Text('About Us'),
+              onTap: () {
+                Navigator.pop(context);
+                Navigator.pushNamed(context, '/aboutus');
+              },
+            ),
+            const SizedBox(height: 8),
+          ],
+        ),
+      ),
+    );
+  }
+
   Future<void> _logout() async {
     final confirmed = await showDialog<bool>(
       context: context,
@@ -95,6 +134,21 @@ class _ProfileScreenState extends State<ProfileScreen> {
       appBar: AppBar(
         backgroundColor: Colors.white,
         elevation: 0,
+
+        //hamburger menu
+        leading: Container(
+          margin: const EdgeInsets.all(8),
+          decoration: BoxDecoration(
+            shape: BoxShape.circle,
+            border: Border.all(color: Colors.grey.shade300, width: 1.5),
+          ),
+          child: IconButton(
+            padding: EdgeInsets.zero,
+            icon: const Icon(Icons.menu, color: Colors.black, size: 20),
+            onPressed: _showHamburgerMenu,
+            tooltip: 'Menu',
+          ),
+        ),
         actions: [
           IconButton(
             icon: const Icon(Icons.edit, color: Colors.black),
