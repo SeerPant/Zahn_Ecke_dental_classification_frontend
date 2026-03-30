@@ -10,6 +10,7 @@ import 'screens/profile/change_password_screen.dart';
 import 'screens/profile/termsandconditions_screen.dart';
 import 'screens/profile/aboutus_screen.dart';
 import 'services/auth_service.dart';
+import '../screens/reports/reports_screen.dart';
 import 'utils/theme.dart';
 
 //entry point of dart app
@@ -37,7 +38,8 @@ class MyApp extends StatelessWidget {
           '/editprofile': (context) => const EditProfileScreen(),
           '/changepassword': (context) => const ChangePasswordScreen(),
           '/terms': (context) => const TermsScreen(),
-          '/aboutus': (context) => const AboutUsScreen()
+          '/aboutus': (context) => const AboutUsScreen(),
+          '/reports': (context) => const ReportScreen()
         },
       ),
     );

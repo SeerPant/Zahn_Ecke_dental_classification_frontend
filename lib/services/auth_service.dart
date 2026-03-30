@@ -52,7 +52,12 @@ class AuthService extends ChangeNotifier {
       try {
         data = json.decode(response.body);
       } catch (e) {
-        _errorMessage = 'Server error. Please try again later.';
+        // _errorMessage = 'Server error. Please try again later.';
+        // _isLoading = false;
+        // notifyListeners();
+        // return false;
+
+        _errorMessage = 'Error: ${e.toString()}'; // both catch blocks
         _isLoading = false;
         notifyListeners();
         return false;
@@ -74,7 +79,12 @@ class AuthService extends ChangeNotifier {
         return false;
       }
     } catch (e) {
-      _errorMessage = 'Network error: Unable to connect to server';
+      // _errorMessage = 'Network error: Unable to connect to server';
+      // _isLoading = false;
+      // notifyListeners();
+      // return false;
+
+      _errorMessage = 'Error: ${e.toString()}'; // both catch blocks
       _isLoading = false;
       notifyListeners();
       return false;
