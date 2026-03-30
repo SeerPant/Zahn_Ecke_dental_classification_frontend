@@ -17,7 +17,7 @@ class _RecommendationsScreenState extends State<RecommendationsScreen> {
   bool _isLoading = true;
   String? _error;
   int _currentPage = 1;
-  static const int _perPage = 3;
+  static const int _perPage = 1; // Changed from 3 to 1
 
   @override
   void initState() {
@@ -131,53 +131,70 @@ class _RecommendationsScreenState extends State<RecommendationsScreen> {
                             ),
                           ),
                           const SizedBox(height: 16),
-                          ..._currentPageReports.map((report) => Container(
-                                margin: const EdgeInsets.only(bottom: 12),
-                                padding: const EdgeInsets.all(16),
-                                decoration: BoxDecoration(
-                                  border: Border.all(color: Colors.grey.shade300),
-                                  borderRadius: BorderRadius.circular(8),
-                                ),
-                                child: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    Row(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.spaceBetween,
-                                      children: [
-                                        Text(
-                                          _capitalize(report['condition'] ?? ''),
-                                          style: const TextStyle(
-                                            fontWeight: FontWeight.bold,
-                                            fontSize: 15,
-                                          ),
+                          Expanded(
+                            child: SingleChildScrollView(
+                              child: Column(
+                                children: [
+                                  ..._currentPageReports.map((report) =>
+                                      Container(
+                                        margin:
+                                            const EdgeInsets.only(bottom: 12),
+                                        padding: const EdgeInsets.all(16),
+                                        decoration: BoxDecoration(
+                                          border: Border.all(
+                                              color: Colors.grey.shade300),
+                                          borderRadius:
+                                              BorderRadius.circular(8),
                                         ),
-                                        Text(
-                                          '${(report['confidence'] as num).toStringAsFixed(1)}%',
-                                          style: TextStyle(
-                                            color: Colors.grey[600],
-                                            fontSize: 13,
-                                          ),
+                                        child: Column(
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.start,
+                                          children: [
+                                            Row(
+                                              mainAxisAlignment:
+                                                  MainAxisAlignment
+                                                      .spaceBetween,
+                                              children: [
+                                                Text(
+                                                  _capitalize(
+                                                      report['condition'] ??
+                                                          ''),
+                                                  style: const TextStyle(
+                                                    fontWeight: FontWeight.bold,
+                                                    fontSize: 15,
+                                                  ),
+                                                ),
+                                                Text(
+                                                  '${(report['confidence'] as num).toStringAsFixed(1)}%',
+                                                  style: TextStyle(
+                                                    color: Colors.grey[600],
+                                                    fontSize: 13,
+                                                  ),
+                                                ),
+                                              ],
+                                            ),
+                                            const SizedBox(height: 10),
+                                            Text(
+                                              report['recommendation'] ?? '',
+                                              style: const TextStyle(
+                                                fontSize: 13,
+                                                height: 1.5,
+                                              ),
+                                            ),
+                                          ],
                                         ),
-                                      ],
-                                    ),
-                                    const SizedBox(height: 10),
-                                    Text(
-                                      report['recommendation'] ?? '',
-                                      style: const TextStyle(
-                                        fontSize: 13,
-                                        height: 1.5,
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                              )),
-                          const Spacer(),
+                                      )),
+                                ],
+                              ),
+                            ),
+                          ),
+                          const SizedBox(height: 16),
                           Row(
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: [
                               IconButton(
-                                icon: const Icon(Icons.arrow_back_ios, size: 16),
+                                icon:
+                                    const Icon(Icons.arrow_back_ios, size: 16),
                                 onPressed: _currentPage > 1
                                     ? () => setState(() => _currentPage--)
                                     : null,

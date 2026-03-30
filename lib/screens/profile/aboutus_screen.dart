@@ -54,7 +54,8 @@ class AboutUsScreen extends StatelessWidget {
               ),
             ),
             const SizedBox(height: 12),
-            _buildInfoBox('Our model is trained with over 5000 dental images.'),
+            _buildInfoBox(
+                'Our model is trained with over 18000 dental images.'),
             const SizedBox(height: 16),
             _buildInfoBox(
                 'Your dental data is not shared without explicit consent.'),

@@ -3,7 +3,8 @@
 
 class ApiConfig {
   //static const String baseUrl = 'http://192.168.1.66:3000';
-  static const String baseUrl = 'http://172.20.10.3:3000';
+  //static const String baseUrl = 'http://172.20.10.3:3000';
+  static const String baseUrl = 'http://192.168.102.4:3000';
   //hitting register
   static const String register = '$baseUrl/api/auth/register';
   //hitting login
